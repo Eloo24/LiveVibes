@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveVibes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="./Logo.png">
+</head>
+<body>
+
+    <h1>Bienvenue sur LiveVibes</h1>
+    <p>Parce que chaque concert est une vibration unique !</p>
+    
+    <h2>Concerts à venir</h2>
+    <div class="concerts" id="upcoming-concerts"></div>
+
+    <h2>Concerts passés</h2>
+    <div class="concerts" id="past-concerts"></div>
+    
+    <script>
+        const concerts = [
+        { date: "2025-05-07", artiste: "Héléna", lieu: "Boulogne-sur-Mer", image: "Héléna.jpg"},
+        { date: "2025-10-16", artiste: "Héléna", lieu: "Zénith d'Amiens", image: "Héléna.jpg" },
+        { date: "2025-05-25", artiste: "Molière, l'Opéra Urbain", lieu: "Zénith Lille", image: "Molière.jpeg" },
+        { date: "2025-04-26", artiste: "Star Academy Tour 2025", lieu: "Douai", image: "StarAc2025.jpg" },
+        { date: "2025-03-20", artiste: "Pierre Garnier", lieu: "Zénith d'Amiens", image: "Pierre Garnier.png" },
+        { date: "2024-12-08", artiste: "Vitaa", lieu: "Zénith d'Amiens", image: "Vitaa.jpg" },
+        { date: "2024-06-15", artiste: "Matt Pokora", lieu: "Zénith d'Amiens", image: "Matt Pokora.jpg" },
+        { date: "2024-03-10", artiste: "Star Academy Tour 2024", lieu: "Zénith d'Amiens", image: "Star Ac 2024.jpg" },
+        { date: "2024-04-05", artiste: "Star Academy Tour 2024", lieu: "Zénith Lille", image: "Star Ac 2024.jpg" },
+        { date: "2019-04-19", artiste: "Lorie", lieu: "Théâtre Sébastopol, Lille", image: "Lorie.jpeg" },
+        { date: "2015-04-25", artiste: "Matt Pokora RED Tour", lieu: "Zénith d'Amiens", image: "MattRED.jpg" },
+    ];
+
+        const setlists = {
+            "Matt Pokora RED Tour": ["Avant Nous", "Medley Hommage (Supersition,Kiss,Smooth Criminal)", "Elle me contrôle", "Je te mentirai", "Dangerous / Don't give my love away", "Juste une photo de toi", "Voir la nuit s'emballer", "On est là", "En attendant la fin", "Coeur Voyageur", "Ma jolie", "Juste un instant", "Mieux que nous", "Go mama", "J'le fais quand même", "Ensemble", "Entre parenthèses", "A nos Actes Manqués", "A nous / Le jour qui se rêve", "Le Monde", "On danse"],
+            "Lorie": ["Près de moi", "La vie est belle", "La plus douce", "Tellement facile", "Trois fois rien", "Tandem", "Un garçon", "Game Over", "Bel été", "Se donner la main", "Je te promets", "J'ai besoin d'amour", "Toute seule", "Rester la même", "Tu te dessines un sourire", "Avance encore", "Ton sourire", "A 20 ans", "Parti pour zouker", "Ensorcelée", "Sur un air latino", "Ne me lâche pas", "En attendant", "Je serai (ta meilleure amie)" ],
+            "Star Academy Tour 2024": ["Envole-moi", "Au bout de mes rêves", "Shallow", "Dance the Night", "Popcorn Salé", "Qu'importe", "Flamme", "Kid", "Ceux qu'on était", "A fleur de toi", "La Seine", "Aimée pour de vrai", "Chante", "Comme tout le monde", "Pour que tu m'aimes encore", "I Want You Back", "Bad", "Thriller", "L'effet de masse", "L'assassymplonie", "Le monde est stone", "Perfect", "Bravo tu as gagné", "Girl on Fire", "Ne me jugez pas", "Diamonds", "Formidable", "Fever", "Pas toi", "Take on Me", "You're the One that I Want", "Baby One More Time", "Comportement", "The Show Must Go On", "Uptown Funk", "Casser la voix", "Famille"],
+            "Matt Pokora": ["Epicentre Intro", "Fahrenheit", "Les planètes", "On s'reverra", "Alexandrie, Alexandra", "Pas sans toi", "Si on disait", "Medley 'De retour & Dangerous'", "Ouh na na", "Rien d'impossible", "Déjà volé", "Elle me contrôle", "Qui on est", "Juste un instant", "La nuit est à nous", "Parce que c'est toi", "Juste une photo de toi", "A nos actes manqués", "Le monde", "Medley 'Robin des Bois", "Medley 'En attendant la fin & Mieux que nous'", "Avant vous", "On est là", "Un ange parmi les hommes", "Tombé", "Epicentre outro"],
+            "Vitaa": ["Charlotte", "Les choses qu'on fait", "A fleur de toi", "Un peu de rêve", "Une fille pas comme les autres", "Toi", "Pourquoi les hommes ?", "Comme d'hab", "Promets-moi", "L-I-H-A-M", "Sur ta route / Ne dis jamais / Game Over / ça les dérange / Bella Ciao", "Ma soeur", "ça va, ça vient", "Avant toi", "Confessions nocturnes", "Charlotte", "Ton amoureuse", "Je n'oublie pas"],
+            "Pierre Garnier": ["Comment faire", "Nous on sait", "Comme toi", "Ce qui me va", "Ceux qu'on était", "A mes côtés", "Tout en mieux", "Les mots", "Pas une larme", "Contrôle", "Laisse", "Cover", "Sur pause", "Adieux nous deux", "Chaque seconde", "Maintenant", "L'horizon", "Ceux qu'on était"],
+            "Star Academy Tour 2025": ["Quand on arrive en ville", "Recommence-moi", "Writing's on the Wall", "A ma place", "Ma faute", "Wannabe", "Medley Clara Luciani : Drôle d'époque, Vos voix, Le reste, Respire encore", "Indélébile", "Cosmo", "Mauvais garçon", "Les moulins de mon coeur", "Sweet Dreams", "All By Myself", "Nous", "Proud Mary", "Medley Cowboy : Texas Hold'Em, Cotton Eye Joe", "Medley Solos : Ne me quitte pas, SOS d'un Terrien en détresse, Creep, I Am What I Am", "Dis-moi", "Unholy", "Medley rock : We Will Rock You, New York avec toi, Les Cactus, Louxor j'adore", "Quand on a que l'amour", "It's a Man's Man's Man's World", "Moves like Jagger", "Never Enought", "Et si tu sens"],
+            "Molière, l'Opéra Urbain": ["Je m'appelle Jean-Baptiste", "T'aimer est une galère", "L'ivresse de la vie", "Lettres entre Molière et son père", "Ho la belle vie sous Conti", "Regardez-moi", "Les retrouvailles", "Aujourd'hui tout va bien", "Ho la belle vie à Paris", "En aparté", "On se moque", "C'est ici et maintenant", "Moi je veux", "C'est la vie qui m'a fait", "Hommes de peu", "Ne dis rien", "Et si c'était nous deux", "A quoi ça rime", "Des hauts et des bas", "Tu finiras par tomber", "Demander pardon", "Rêver j'en ai l'habitude"]
+        };
+
+        const today = new Date();
+
+        function formatDate(isoDate) {
+            const moisNoms = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const [year, month, day] = isoDate.split("-");
+            return `${parseInt(day)} ${moisNoms[parseInt(month) - 1]} ${year}`;
+        }
+
+        function groupConcertsByArtist(concerts) {
+            const grouped = {};
+            concerts.forEach(concert => {
+                if (!grouped[concert.artiste]) {
+                    grouped[concert.artiste] = { image: concert.image, datesLieux: [] };
+                }
+                grouped[concert.artiste].datesLieux.push({ date: concert.date, lieu: concert.lieu });
+            });
+            return grouped;
+        }
+
+        function displayConcerts(concerts, containerId) {
+            const container = document.getElementById(containerId);
+            const groupedConcerts = groupConcertsByArtist(concerts);
+            
+            Object.keys(groupedConcerts).forEach(artiste => {
+                let div = document.createElement("div");
+                div.classList.add("concert");
+                div.innerHTML = `
+                    <img src="${groupedConcerts[artiste].image}" alt="${artiste} Concert">
+                    <h3>${artiste}</h3>
+                    ${groupedConcerts[artiste].datesLieux.map(dl => `
+                    <p>${formatDate(dl.date)}</p> 
+                    <p>${dl.lieu}</p>
+                    `).join("")}
+                    <button class="show-setlist">Setlist</button>
+                    <div class="setlist">
+                        <h4>Setlist :</h4>
+                        <p>${setlists[artiste] ? setlists[artiste].join("<br>") : "Non disponible"}</p>
+                        <button class="hide-setlist">Fermer</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            document.querySelectorAll(".show-setlist").forEach(button => {
+                button.addEventListener("click", function () {
+                    let setlist = this.nextElementSibling;
+                    setlist.classList.add("visible");
+                });
+            });
+
+            document.querySelectorAll(".hide-setlist").forEach(button => {
+                button.addEventListener("click", function () {
+                    let setlist = this.parentElement;
+                    setlist.classList.remove("visible");
+                });
+            });
+        }
+
+        const upcoming = concerts.filter(c => new Date(c.date) >= today);
+        const past = concerts.filter(c => new Date(c.date) < today);
+
+        displayConcerts(upcoming, "upcoming-concerts");
+        displayConcerts(past, "past-concerts");
+
+        function displayGallery(concerts) {
+        const galleryContainer = document.getElementById("gallery");
+        const groupedConcerts = groupConcertsByArtist(concerts);
+
+        Object.keys(groupedConcerts).forEach(artiste => {
+            let galleryDiv = document.createElement("div");
+            galleryDiv.classList.add("gallery-item");
+            
+            let images = concerts.filter(c => c.artiste === artiste).map(c => c.image);
+            
+            galleryDiv.innerHTML = `
+                <h3>${artiste}</h3>
+                <div class="carousel" id="carousel-${artiste.replace(/\s+/g, '')}">
+                    ${images.map(img => `<img src="${img}" alt="${artiste} Concert">`).join("")}
+                </div>
+                <button onclick="prevSlide('${artiste.replace(/\s+/g, '')}')">⬅️</button>
+                <button onclick="nextSlide('${artiste.replace(/\s+/g, '')}')">➡️</button>
+            `;
+            galleryContainer.appendChild(galleryDiv);
+        });
+    }
+    
+    </script>
+
+</body>
+</html>
